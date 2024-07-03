@@ -45,6 +45,7 @@
             color: red;
             font-size: 0.875em;
             display: none;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -52,45 +53,80 @@
     <div class="container">
         <h1 class="text-center join-title">회원가입</h1>
         <form method="post" action="/Account/Register" id="registerForm">
+
             <div class="mb-3">
-                <label for="username" class="form-label">아이디</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="아이디를 입력하세요" required>
+                <div class="d-flex justify-content-between align-items-center">
+                    <label for="userId" class="form-label">아이디</label>
+                    <button type="button" class="btn btn-secondary" id="checkUserIdBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                </div>
+                <input type="text" class="form-control" id="userId" name="userId" placeholder="아이디를 입력하세요" required>
             </div>
+
             <div class="mb-3">
                 <label for="password" class="form-label">비밀번호</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
             </div>
+
             <div class="mb-3">
                 <label for="confirmPassword" class="form-label">비밀번호 확인</label>
-                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="비밀번호를 한번더 입력하세요" required>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="비밀번호를 한번 더 입력하세요" required>
+                <div class="error-message" id="passwordMatchError"></div>
             </div>
+
             <div class="mb-3">
                 <label for="name" class="form-label">이름</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요" required>
             </div>
+
             <div class="mb-3">
                 <label for="birthdate" class="form-label">생년월일</label>
                 <input type="number" class="form-control" id="birthdate" name="birthdate" placeholder="생년월일을 입력하세요 (Ex. 19940830)" required>
                 <div class="error-message" id="birthdateError">생년월일 8자리를 입력해주세요</div>
             </div>
+
             <div class="mb-3">
-                <label for="email" class="form-label">이메일 주소</label>
+                <div class="d-flex justify-content-between align-items-center">
+                    <label for="email" class="form-label">이메일 주소</label>
+                    <button type="button" class="btn btn-secondary" id="checkUserIdBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                </div>
                 <input type="email" class="form-control" id="email" name="email" placeholder="사용중인 이메일 주소를 입력하세요" required>
             </div>
+
             <div class="mb-3">
-                <label for="phone" class="form-label">연락처</label>
+                <div class="d-flex justify-content-between align-items-center">
+                    <label for="phone" class="form-label">연락처</label>
+                    <button type="button" class="btn btn-secondary" id="checkUserIdBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                </div>
                 <input type="tel" class="form-control" id="phone" name="phone" placeholder="사용중인 휴대번호를 입력하세요" required>
             </div>
+
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-dark w-25 mx-4 join-join-btn" onclick="window.location.href='/Home/Index'">취소</button>
                 <button type="submit" class="btn btn-primary w-25 mx-4 join-join-btn">저장</button>
             </div>
+
         </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
+            $('#confirmPassword').on('input', function () {
+                var password = $('#password').val();
+                var confirmPassword = $('#confirmPassword').val();
+                var messageElement = $('#passwordMatchError');
+
+                if (password && confirmPassword) {
+                    if (password === confirmPassword) {
+                        messageElement.text('두 비밀번호가 일치합니다.').css('color', 'green').show();
+                    } else {
+                        messageElement.text('두 비밀번호가 일치하지 않습니다.').css('color', 'red').show();
+                    }
+                } else {
+                    messageElement.hide();
+                }
+            });
+
             $('#birthdate').on('keydown', function (e) {
                 if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                     e.preventDefault();
@@ -104,8 +140,13 @@
             $('form').on('submit', function (e) {
                 e.preventDefault();
 
+                let idBool = false;
+                let pwBool = false;
+                let emailBool = false;
+                let phonBool = false;
+
                 var req = {
-                    Id: $('#username').val(),
+                    Id: $('#userId').val(),
                     Pw: $('#password').val(),
                     Name: $('#name').val(),
                     Birth: $('#birthdate').val(),
