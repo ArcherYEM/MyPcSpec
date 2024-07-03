@@ -56,10 +56,10 @@
 
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center">
-                    <label for="userId" class="form-label">아이디</label>
-                    <button type="button" class="btn btn-secondary" id="checkUserIdBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                    <label for="Id" class="form-label">아이디</label>
+                    <button type="button" class="btn btn-secondary" id="checkIdBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
                 </div>
-                <input type="text" class="form-control" id="userId" name="userId" placeholder="아이디를 입력하세요" required>
+                <input type="text" class="form-control" id="Id" name="Id" placeholder="아이디를 입력하세요" required>
             </div>
 
             <div class="mb-3">
@@ -76,6 +76,7 @@
             <div class="mb-3">
                 <label for="name" class="form-label">이름</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요" required>
+                <div class="error-message" id="nameError">이름에는 숫자나 특수문자를 포함할 수 없습니다</div>
             </div>
 
             <div class="mb-3">
@@ -87,7 +88,7 @@
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <label for="email" class="form-label">이메일 주소</label>
-                    <button type="button" class="btn btn-secondary" id="checkUserIdBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                    <button type="button" class="btn btn-secondary" id="checkEmailBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
                 </div>
                 <input type="email" class="form-control" id="email" name="email" placeholder="사용중인 이메일 주소를 입력하세요" required>
             </div>
@@ -95,7 +96,7 @@
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <label for="phone" class="form-label">연락처</label>
-                    <button type="button" class="btn btn-secondary" id="checkUserIdBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                    <button type="button" class="btn btn-secondary" id="checkPhoneBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
                 </div>
                 <input type="tel" class="form-control" id="phone" name="phone" placeholder="사용중인 휴대번호를 입력하세요" required>
             </div>
@@ -111,6 +112,19 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
+            // 한국어,영어,일본어,중국어 만 입력가능
+            $('#name').on('input', function () {
+                var name = $(this).val();
+                var nameError = $('#nameError');
+                var nameRegex = /^[가-힣a-zA-Z一-龥ぁ-ゔァ-ヴー々〆〤\s]*$/;
+
+                if (!nameRegex.test(name)) {
+                    nameError.show();
+                } else {
+                    nameError.hide();
+                }
+            });
+
             $('#confirmPassword').on('input', function () {
                 var password = $('#password').val();
                 var confirmPassword = $('#confirmPassword').val();
@@ -137,6 +151,44 @@
                 }
             });
 
+            $('#checkIdBtn').on('click', function () {
+                var Id = $('#Id').val();
+                checkDuplicate('Id', Id, $(this));
+            });
+
+            $('#checkEmailBtn').on('click', function () {
+                var email = $('#email').val();
+                checkDuplicate('email', email, $(this));
+            });
+
+            $('#checkPhoneBtn').on('click', function () {
+                var phone = $('#phone').val();
+                checkDuplicate('phone', phone, $(this));
+            });
+
+            // 중복확인(동기화)
+            function checkDuplicate(field, value, button) {
+                $.ajax({
+                    url: '/Account/DuplicateCheck',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ field: field, value: value }),
+                    success: function (response) {
+                        button.css('background-color', 'green');
+                        button.prop('disabled', true);
+                        button.text('확인완료');
+                    },
+                    error: function (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Fail',
+                            text: error.responseText
+                        });
+                    }
+                });
+            }
+
+            //회원가입 저장
             $('form').on('submit', function (e) {
                 e.preventDefault();
 
@@ -146,7 +198,7 @@
                 let phonBool = false;
 
                 var req = {
-                    Id: $('#userId').val(),
+                    Id: $('#Id').val(),
                     Pw: $('#password').val(),
                     Name: $('#name').val(),
                     Birth: $('#birthdate').val(),

@@ -14,16 +14,29 @@ namespace MyPCSpec.Services
             _mpsContext = mpsContext;
         }
 
-        public async Task<List<Member>> GetAll()
-        {
-            var datas = await _mpsContext.Member.ToListAsync();
-
-            return datas;
-        }
-
         public async Task InsertAsync(Member member)
         {
             await _mpsContext.Member.AddAsync(member);
+        }
+
+        public async Task<bool> Find(string column, string data)
+        {
+            bool exists = true;
+
+            if (column == "Id")
+            {
+                exists = await _mpsContext.Member.AnyAsync(m => m.Id == data);
+            }
+            else if (column == "email")
+            {
+                exists = await _mpsContext.Member.AnyAsync(m => m.Email == data);
+            }
+            else if (column == "phone")
+            {
+                exists = await _mpsContext.Member.AnyAsync(m => m.Phone == data);
+            }
+
+            return exists;
         }
     }
 }

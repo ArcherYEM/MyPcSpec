@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MyPCSpec.Models;
 using MyPCSpec.Models.DAO;
 using MyPCSpec.Models.DTO;
@@ -12,7 +13,7 @@ using System.Text;
 namespace MyPCSpec.Controllers
 {
     public class AccountController : Controller
-	{
+    {
         private readonly ILogger<AccountController> _logger;
         private readonly IMemberService _memberService;
         private readonly MpsContext _mpsContext;
@@ -29,9 +30,9 @@ namespace MyPCSpec.Controllers
         }
 
         public IActionResult Login()
-		{
-			return View();
-		}
+        {
+            return View();
+        }
 
         public IActionResult Join()
         {
@@ -137,6 +138,30 @@ namespace MyPCSpec.Controllers
                 return "연락처";
             }
             return "알 수 없는 필드";
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DuplicateCheck([FromBody] Dictionary<string, string> req)
+        {
+            string column = req["field"];
+            string data = req["value"].Trim();
+
+            if (!column.IsNullOrEmpty() && !data.IsNullOrEmpty())
+            {
+                bool exists = await _memberService.Find(column, data);
+                if (!exists)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest(data + " (은)는 이미 존재합니다.");
+                }
+            }
+            else
+            {
+                return BadRequest("값이 비어있습니다.");
+            }
         }
     }
 }

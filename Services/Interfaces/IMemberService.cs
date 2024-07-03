@@ -4,7 +4,7 @@ namespace MyPCSpec.Services.Interfaces
 {
     public interface IMemberService
     {
-        Task<List<Member>> GetAll();
         Task InsertAsync(Member member);
+        Task<bool> Find(string column, string data);
     }
 }
