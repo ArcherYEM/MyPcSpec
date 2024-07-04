@@ -145,6 +145,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        let isIdDuplication = true;
+        let isEmailDuplication = true;
+        let isPhoneDuplication = true;
+
         $(document).ready(function () {
             // 한국어,영어,일본어,중국어 만 입력가능
             $('#name').on('input', function () {
@@ -262,6 +266,9 @@
 
             // 중복확인(동기화)
             function checkDuplicate(field, value, button) {
+                console.log("id: " + isIdDuplication);
+                console.log("em: " + isEmailDuplication);
+                console.log("ph: " + isPhoneDuplication);
                 $.ajax({
                     url: '/Account/DuplicateCheck',
                     type: 'POST',
@@ -272,12 +279,15 @@
                         button.prop('disabled', true);
                         button.text('확인완료');
                         if (field == "Id") {
+                            isIdDuplication = false;
                             $('#idEditBtn').show();
                         }
                         if (field == "email"){
+                            isEmailDuplication = false;
                             $('#emailEditBtn').show();
                         }
                         if (field == "phone") {
+                            isPhoneDuplication = false;
                             $('#phoneEditBtn').show();
                         }
                     },
@@ -295,6 +305,10 @@
             $('#registerForm').on('submit', function (e) {
                 e.preventDefault();
 
+                console.log("id: " + isIdDuplication);
+                console.log("em: " + isEmailDuplication);
+                console.log("ph: " + isPhoneDuplication);
+
                 var req = {
                     Id: $('#Id').val(),
                     Pw: $('#password').val(),
@@ -303,7 +317,7 @@
                     Email: $('#email').val(),
                     Phone: $('#phone').val()
                 };
-
+                if (!isIdDuplication && !isEmailDuplication && !isPhoneDuplication)
                 $.ajax({
                     url: '/Account/Join',
                     type: 'POST',
