@@ -9,6 +9,10 @@
             margin-bottom: 50px;
         }
 
+        .blackColor {
+            color: black;
+        }
+
         .form-label {
             color: #ffffff;
         }
@@ -66,13 +70,45 @@
             </div>
 
             <div class="d-flex justify-content-between" style="margin-top: 35px;">
-                <span class="idPwFindBtn">ID/PW 찾기</span>
+                <div>
+                    <span class="idPwFindBtn" id="findIdPw" data-bs-toggle="modal" data-bs-target="#exampleModal">ID/PW 찾기</span>
+                </div>
                 <button type="submit" class="btn btn-primary w-25 mx-4 join-join-btn" id="loginBtn" style="margin-right: 0px !important;">로그인</button>
             </div>
 
         </form>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title blackColor" id="exampleModalLabel">ID/PW 찾기</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column justify-content-center" style="min-height: 250px !important;">
+                    <form id="findIdForm">
+                        <div class="mb-3 d-flex">
+                            <div class="flex-grow-1">
+                                <input type="email" class="form-control" id="findIdEmail" name="findIdEmail" placeholder="가입된 이메일을 입력하세요" required>
+                            </div>
+                            <button type="button" class="btn btn-dark align-self-end ms-2">인증코드 전송</button>
+                        </div>
+                        <div class="mb-3 d-flex" style="margin-top: 40px;">
+                            <input type="text" class="form-control" id="code" name="code" placeholder="인증번호" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary w-25 mx-4 join-join-btn" onclick="submitFindIdForm()">ID 찾기</button>
+                    <button type="button" class="btn btn-primary w-25 mx-4 join-join-btn" onclick="submitFindPwForm()">PW 찾기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
