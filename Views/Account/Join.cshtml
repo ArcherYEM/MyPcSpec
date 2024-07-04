@@ -266,9 +266,6 @@
 
             // 중복확인(동기화)
             function checkDuplicate(field, value, button) {
-                console.log("id: " + isIdDuplication);
-                console.log("em: " + isEmailDuplication);
-                console.log("ph: " + isPhoneDuplication);
                 $.ajax({
                     url: '/Account/DuplicateCheck',
                     type: 'POST',
@@ -301,13 +298,34 @@
                 });
             }
 
+            //수정하기
+            $('#idEditBtn').on('click', function () {
+                isIdDuplication = true;
+                $('#checkIdBtn').css('background-color', '#6C757D');
+                $('#checkIdBtn').prop('disabled', false);
+                $('#checkIdBtn').text('중복확인');
+                $('#idEditBtn').hide();
+            });
+
+            $('#emailEditBtn').on('click', function () {
+                isEmailDuplication = true;
+                $('#checkEmailBtn').css('background-color', '#6C757D');
+                $('#checkEmailBtn').prop('disabled', false);
+                $('#checkEmailBtn').text('중복확인');
+                $('#emailEditBtn').hide();
+            });
+
+            $('#phoneEditBtn').on('click', function () {
+                isPhoneDuplication = true;
+                $('#checkPhoneBtn').css('background-color', '#6C757D');
+                $('#checkPhoneBtn').prop('disabled', false);
+                $('#checkPhoneBtn').text('중복확인');
+                $('#phoneEditBtn').hide();
+            });
+
             // 회원가입 저장
             $('#registerForm').on('submit', function (e) {
                 e.preventDefault();
-
-                console.log("id: " + isIdDuplication);
-                console.log("em: " + isEmailDuplication);
-                console.log("ph: " + isPhoneDuplication);
 
                 var req = {
                     Id: $('#Id').val(),
