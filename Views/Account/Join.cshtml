@@ -113,7 +113,6 @@
                     </div>
                 </div>
                 <input type="email" class="form-control" id="email" name="email" placeholder="사용중인 이메일 주소를 입력하세요" required>
-                <div class="error-message" id="emailError" style="display:none;"></div>
             </div>
 
             <div class="mb-3">
@@ -147,20 +146,12 @@
         let isEmailDuplication = true;
         let isPhoneDuplication = true;
 
+        let idCk = false;
+        let nameCk = false;
+        let pwCk = false;
+        let birthCk = false;
+
         $(document).ready(function () {
-            // 한국어,영어,일본어,중국어 만 입력가능
-            $('#name').on('input', function () {
-                var name = $(this).val();
-                var nameError = $('#nameError');
-                var nameRegex = /^[가-힣a-zA-Z一-龥ぁ-ゔァ-ヴー々〆〤\s]*$/;
-
-                if (!nameRegex.test(name)) {
-                    nameError.show();
-                } else {
-                    nameError.hide();
-                }
-            });
-
             // 아이디 유효성 검사
             $('#Id').on('input', function () {
                 var id = $(this).val();
@@ -173,33 +164,20 @@
                     idError.text('아이디에 영문이 한글자 이상 필요합니다.')
                         .css('color', 'red')
                         .show();
+                    idCk = false;
                 } else {
                     idError.hide();
+                    idCk = true;
                 }
 
                 if (!hasValidLength) {
                     idError2.text('아이디는 4~10 글자 사이로 입력해주세요.')
                         .css('color', 'red')
                         .show();
+                    idCk = false;
                 } else {
                     idError2.hide();
-                }
-            });
-
-            // 이메일 유효성 검사
-            $('#email').on('input', function () {
-                var email = $(this).val();
-                var emailError = $('#emailError'); // 이메일 오류 메시지를 표시할 요소
-
-                var atCount = (email.match(/&#64;/g) || []).length;
-                var dotCount = (email.match(/\./g) || []).length;
-
-                if (atCount !== 1 || dotCount !== 1) {
-                    emailError.text('이메일에는 (＠) 와 (.) 이 각각 1개씩만 포함되어야 합니다.')
-                        .css('color', 'red')
-                        .show();
-                } else {
-                    emailError.hide();
+                    idCk = true;
                 }
             });
 
@@ -212,8 +190,10 @@
                     $('#passwordMatchError2').text('비밀번호는 4~20 글자 사이로 입력해주세요.')
                         .css('color', 'red')
                         .show();
+                    pwCk = false;
                 } else {
                     $('#passwordMatchError2').hide();
+                    pwCk = true;
                 }
 
                 if (!hasLetter || !hasNumber) {
@@ -221,8 +201,10 @@
                         .text('비밀번호는 영문자와 숫자를 최소 한 글자 이상 포함해야 합니다.')
                         .css('color', 'red')
                         .show();
+                    pwCk = false;
                 } else {
                     $('#passwordMatchError').hide();
+                    pwCk = true;
                 }
 
                 checkPasswordMatch();
@@ -239,19 +221,36 @@
                         messageElement3.text('두 비밀번호가 일치합니다.')
                             .css('color', 'green')
                             .show();
+                        pwCk = true;
                     } else {
                         messageElement3.text('두 비밀번호가 일치하지 않습니다.')
                             .css('color', 'red')
                             .show();
+                        pwCk = false;
                     }
                 } else {
                     messageElement3.hide();
+                    pwCk = false;
                 }
             }
 
             // 비밀번호 일치 여부 검토
             $('#confirmPassword').on('input', function () {
                 checkPasswordMatch();
+            });
+
+            // 이름 유효성 검사
+            $('#name').on('input', function () {
+                var name = $(this).val();
+                var nameError = $('#nameError');
+                var nameRegex = /^[가-힣a-zA-Z一-龥ぁ-ゔァ-ヴー々〆〤\s]*$/;
+
+                if (!nameRegex.test(name)) {
+                    nameError.show();
+                } else {
+                    nameCk = true;
+                    nameError.hide();
+                }
             });
 
             // 생년월일 자리수 체크 및 유효성 검사
@@ -275,10 +274,15 @@
 
                     if (monthDigit1 === 0 && (monthDigit2 < 1 || monthDigit2 > 9)) {
                         valid = false;
+                        birthCk = false;
                     } else if (monthDigit1 === 1 && (monthDigit2 < 0 || monthDigit2 > 2)) {
                         valid = false;
+                        birthCk = false;
                     } else if (monthDigit1 > 1) {
                         valid = false;
+                        birthCk = false;
+                    } else {
+                        birthCk = true;
                     }
                 }
 
@@ -289,10 +293,15 @@
 
                     if (dayDigit1 < 0 || dayDigit1 > 3) {
                         valid = false;
+                        birthCk = false;
                     } else if (dayDigit1 === 0 && dayDigit2 === 0) {
                         valid = false;
+                        birthCk = false;
                     } else if (dayDigit1 === 3 && (dayDigit2 < 0 || dayDigit2 > 1)) {
                         valid = false;
+                        birthCk = false;
+                    } else {
+                        birthCk = true;
                     }
                 }
 
@@ -308,6 +317,8 @@
 
                     if (birthdateObject < minDate || birthdateObject > maxDate) {
                         valid = false;
+                    } else {
+                        birthCk = true;
                     }
                 }
 
@@ -315,8 +326,10 @@
                     birthdateError2.text('생년월일을 확인해주세요.')
                         .css('color', 'red')
                         .show();
+                    birthCk = false;
                 } else {
                     birthdateError2.hide();
+                    birthCk = true;
                 }
             });
 
@@ -408,7 +421,13 @@
                     Level: 'User'
                 };
 
-                if (!isIdDuplication && !isEmailDuplication && !isPhoneDuplication) {
+                if (!isIdDuplication &&
+                    !isEmailDuplication &&
+                    !isPhoneDuplication &&
+                    idCk &&
+                    pwCk &&
+                    nameCk &&
+                    birthCk) {
                     $.ajax({
                         url: '/Account/Join',
                         type: 'POST',
@@ -432,11 +451,47 @@
                             });
                         }
                     });
-                } else {
+                } else if (isIdDuplication) {
                     Swal.fire({
                         icon: 'warning',
-                        title: '중복 확인 필요',
-                        text: '아이디, 이메일, 연락처 중복 확인을 해주세요.'
+                        title: 'Fail',
+                        text: '아이디 중복확인 필요'
+                    });
+                } else if (isEmailDuplication) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '이메일 중복확인 필요'
+                    });
+                } else if (isPhoneDuplication) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '연락처 중복확인 필요'
+                    });
+                } else if (!idCk){
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '아이디 형식 확인 필요'
+                    });
+                } else if (!pwCk) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '비밀번호 형식 확인 필요'
+                    });
+                } else if (!nameCk) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '이름 형식 확인 필요'
+                    });
+                } else if (!birthCk) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '생년월일 형식 확인 필요'
                     });
                 }
             });
