@@ -47,6 +47,12 @@
             display: none;
             margin-top: 5px;
         }
+
+        .button-group {
+            display: flex;
+            gap: 5px;
+            justify-content: flex-end;
+        }
     </style>
 </head>
 <body>
@@ -57,7 +63,15 @@
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <label for="Id" class="form-label">아이디</label>
-                    <button type="button" class="btn btn-secondary" id="checkIdBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" id="checkIdBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                        <button type="button" class="btn btn-success" id="idEditBtn" style="display: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"></path>
+                            </svg>
+                            수정
+                        </button>
+                    </div>
                 </div>
                 <input type="text" class="form-control" id="Id" name="Id" placeholder="아이디를 입력하세요" required>
                 <div class="error-message" id="idError"></div>
@@ -92,7 +106,15 @@
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <label for="email" class="form-label">이메일 주소</label>
-                    <button type="button" class="btn btn-secondary" id="checkEmailBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" id="checkEmailBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                        <button type="button" class="btn btn-success" id="emailEditBtn" style="display: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"></path>
+                            </svg>
+                            수정
+                        </button>
+                    </div>
                 </div>
                 <input type="email" class="form-control" id="email" name="email" placeholder="사용중인 이메일 주소를 입력하세요" required>
             </div>
@@ -100,7 +122,15 @@
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <label for="phone" class="form-label">연락처</label>
-                    <button type="button" class="btn btn-secondary" id="checkPhoneBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" id="checkPhoneBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                        <button type="button" class="btn btn-success" id="phoneEditBtn" style="display: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"></path>
+                            </svg>
+                            수정
+                        </button>
+                    </div>
                 </div>
                 <input type="tel" class="form-control" id="phone" name="phone" placeholder="사용중인 휴대번호를 입력하세요" required>
             </div>
@@ -241,6 +271,15 @@
                         button.css('background-color', 'green');
                         button.prop('disabled', true);
                         button.text('확인완료');
+                        if (field == "Id") {
+                            $('#idEditBtn').show();
+                        }
+                        if (field == "email"){
+                            $('#emailEditBtn').show();
+                        }
+                        if (field == "phone") {
+                            $('#phoneEditBtn').show();
+                        }
                     },
                     error: function (error) {
                         Swal.fire({
