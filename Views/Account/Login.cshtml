@@ -3,17 +3,73 @@
     <title>로그인</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
+        .container {
+            max-width: 600px;
+            margin-top: 20px;
+            margin-bottom: 50px;
+        }
+
+        .form-label {
+            color: #ffffff;
+        }
+
         .login-title {
             margin-bottom: 40px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 5px;
+            justify-content: flex-end;
+        }
+
+        .idPwFindBtn:hover{
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .idPwFindBtn {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 50px;
+            width: 80%;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <img src="/image/MYPcSpec_logo_wide.png" alt="My Image" />
+
         <h1 class="text-center login-title">로그인</h1>
         <form method="post">
         
+            <div class="mb-3">
+                <label for="Id" class="form-label">아이디</label>
+                <input type="text" class="form-control" id="Id" name="Id" placeholder="아이디를 입력하세요" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">비밀번호</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+            </div>
+
+            <div class="d-flex justify-content-between" style="margin-top: 35px;">
+                <span class="idPwFindBtn">ID/PW 찾기</span>
+                <button type="submit" class="btn btn-primary w-25 mx-4 join-join-btn" id="loginBtn" style="margin-right: 0px !important;">로그인</button>
+            </div>
+
         </form>
     </div>
 
