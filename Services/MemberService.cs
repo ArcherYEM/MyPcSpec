@@ -38,5 +38,17 @@ namespace MyPCSpec.Services
 
             return exists;
         }
+
+        public async Task<Member> Get(string id)
+        {
+            var entity = await _mpsContext.Member.FirstOrDefaultAsync(m => m.Id == id);
+
+            return entity;
+        }
+
+        public void Update(Member member)
+        {
+            _mpsContext.Member.Update(member);
+        }
     }
 }
