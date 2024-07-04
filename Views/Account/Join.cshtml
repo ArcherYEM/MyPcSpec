@@ -3,11 +3,6 @@
     <title>회원가입</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
-        body {
-            background-color: #2c2c2c;
-            color: #ffffff;
-        }
-
         .container {
             max-width: 600px;
             margin-top: 20px;
@@ -47,17 +42,32 @@
             display: none;
             margin-top: 5px;
         }
+
+        .button-group {
+            display: flex;
+            gap: 5px;
+            justify-content: flex-end;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1 class="text-center join-title">회원가입</h1>
-        <form method="post" action="/Account/Register" id="registerForm">
+        <form method="post" action="/Account/Join" id="registerForm">
 
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <label for="Id" class="form-label">아이디</label>
-                    <button type="button" class="btn btn-secondary" id="checkIdBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" id="checkIdBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                        <button type="button" class="btn btn-success" id="idEditBtn" style="display: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"></path>
+                            </svg>
+                            수정
+                        </button>
+                    </div>
                 </div>
                 <input type="text" class="form-control" id="Id" name="Id" placeholder="아이디를 입력하세요" required>
                 <div class="error-message" id="idError"></div>
@@ -86,13 +96,21 @@
             <div class="mb-3">
                 <label for="birthdate" class="form-label">생년월일</label>
                 <input type="number" class="form-control" id="birthdate" name="birthdate" placeholder="생년월일을 입력하세요 (Ex. 19940830)" required>
-                <div class="error-message" id="birthdateError">생년월일 8자리를 입력해주세요</div>
+                <div class="error-message" id="birthdateError2" style="display:none;"></div>
             </div>
 
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <label for="email" class="form-label">이메일 주소</label>
-                    <button type="button" class="btn btn-secondary" id="checkEmailBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" id="checkEmailBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                        <button type="button" class="btn btn-success" id="emailEditBtn" style="display: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"></path>
+                            </svg>
+                            수정
+                        </button>
+                    </div>
                 </div>
                 <input type="email" class="form-control" id="email" name="email" placeholder="사용중인 이메일 주소를 입력하세요" required>
             </div>
@@ -100,35 +118,44 @@
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <label for="phone" class="form-label">연락처</label>
-                    <button type="button" class="btn btn-secondary" id="checkPhoneBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" id="checkPhoneBtn" style="padding-top: 5px; padding-bottom: 5px;">중복확인</button>
+                        <button type="button" class="btn btn-success" id="phoneEditBtn" style="display: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"></path>
+                            </svg>
+                            수정
+                        </button>
+                    </div>
                 </div>
-                <input type="tel" class="form-control" id="phone" name="phone" placeholder="사용중인 휴대번호를 입력하세요" required>
+                <input type="tel" class="form-control" id="phone" name="phone" placeholder="연락처를 하이푼(-)없이 입력하세요 (Ex. 01012341234)" required>
             </div>
 
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-dark w-25 mx-4 join-join-btn" onclick="window.location.href='/Home/Index'">취소</button>
-                <button type="submit" class="btn btn-primary w-25 mx-4 join-join-btn">저장</button>
+                <button type="submit" class="btn btn-primary w-25 mx-4 join-join-btn" id="saveBtn">저장</button>
             </div>
 
         </form>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        // 중복 bool
+        let isIdDuplication = true;
+        let isEmailDuplication = true;
+        let isPhoneDuplication = true;
+
+        // 형식 bool
+        let idCk = false;
+        let nameCk = false;
+        let pwCk = false;
+        let birthCk = false;
+        let emailCk = false;
+        let phoneCk = false;
+
         $(document).ready(function () {
-            // 한국어,영어,일본어,중국어 만 입력가능
-            $('#name').on('input', function () {
-                var name = $(this).val();
-                var nameError = $('#nameError');
-                var nameRegex = /^[가-힣a-zA-Z一-龥ぁ-ゔァ-ヴー々〆〤\s]*$/;
-
-                if (!nameRegex.test(name)) {
-                    nameError.show();
-                } else {
-                    nameError.hide();
-                }
-            });
-
             // 아이디 유효성 검사
             $('#Id').on('input', function () {
                 var id = $(this).val();
@@ -141,19 +168,24 @@
                     idError.text('아이디에 영문이 한글자 이상 필요합니다.')
                         .css('color', 'red')
                         .show();
+                    idCk = false;
                 } else {
                     idError.hide();
+                    idCk = true;
                 }
 
                 if (!hasValidLength) {
                     idError2.text('아이디는 4~10 글자 사이로 입력해주세요.')
                         .css('color', 'red')
                         .show();
+                    idCk = false;
                 } else {
                     idError2.hide();
+                    idCk = true;
                 }
             });
 
+            // 패스워드 유효성 검사
             $('#password').on('input', function () {
                 var hasLetter = /[a-zA-Z]/.test($(this).val());
                 var hasNumber = /\d/.test($(this).val());
@@ -162,8 +194,10 @@
                     $('#passwordMatchError2').text('비밀번호는 4~20 글자 사이로 입력해주세요.')
                         .css('color', 'red')
                         .show();
+                    pwCk = false;
                 } else {
                     $('#passwordMatchError2').hide();
+                    pwCk = true;
                 }
 
                 if (!hasLetter || !hasNumber) {
@@ -171,8 +205,10 @@
                         .text('비밀번호는 영문자와 숫자를 최소 한 글자 이상 포함해야 합니다.')
                         .css('color', 'red')
                         .show();
+                    pwCk = false;
                 } else {
                     $('#passwordMatchError').hide();
+                    pwCk = true;
                 }
 
                 checkPasswordMatch();
@@ -189,13 +225,16 @@
                         messageElement3.text('두 비밀번호가 일치합니다.')
                             .css('color', 'green')
                             .show();
+                        pwCk = true;
                     } else {
                         messageElement3.text('두 비밀번호가 일치하지 않습니다.')
                             .css('color', 'red')
                             .show();
+                        pwCk = false;
                     }
                 } else {
                     messageElement3.hide();
+                    pwCk = false;
                 }
             }
 
@@ -204,7 +243,21 @@
                 checkPasswordMatch();
             });
 
-            // 생년월일 자리수 체크
+            // 이름 유효성 검사
+            $('#name').on('input', function () {
+                var name = $(this).val();
+                var nameError = $('#nameError');
+                var nameRegex = /^[가-힣a-zA-Z一-龥ぁ-ゔァ-ヴー々〆〤\s]*$/;
+
+                if (!nameRegex.test(name)) {
+                    nameError.show();
+                } else {
+                    nameCk = true;
+                    nameError.hide();
+                }
+            });
+
+            // 생년월일 자리수 체크 및 유효성 검사
             $('#birthdate').on('keydown', function (e) {
                 if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                     e.preventDefault();
@@ -213,24 +266,148 @@
                 if (this.value.length > 8) {
                     this.value = this.value.slice(0, 8);
                 }
+
+                var birthdate = $(this).val();
+                var birthdateError2 = $('#birthdateError2');
+                var valid = true;
+
+                // 월 입력 조건 확인
+                if (birthdate.length >= 6) {
+                    var monthDigit1 = parseInt(birthdate.charAt(4), 10);
+                    var monthDigit2 = parseInt(birthdate.charAt(5), 10);
+
+                    if (monthDigit1 === 0 && (monthDigit2 < 1 || monthDigit2 > 9)) {
+                        valid = false;
+                        birthCk = false;
+                    } else if (monthDigit1 === 1 && (monthDigit2 < 0 || monthDigit2 > 2)) {
+                        valid = false;
+                        birthCk = false;
+                    } else if (monthDigit1 > 1) {
+                        valid = false;
+                        birthCk = false;
+                    } else {
+                        birthCk = true;
+                    }
+                }
+
+                // 일 입력 조건 확인
+                if (birthdate.length >= 8) {
+                    var dayDigit1 = parseInt(birthdate.charAt(6), 10);
+                    var dayDigit2 = parseInt(birthdate.charAt(7), 10);
+
+                    if (dayDigit1 < 0 || dayDigit1 > 3) {
+                        valid = false;
+                        birthCk = false;
+                    } else if (dayDigit1 === 0 && dayDigit2 === 0) {
+                        valid = false;
+                        birthCk = false;
+                    } else if (dayDigit1 === 3 && (dayDigit2 < 0 || dayDigit2 > 1)) {
+                        valid = false;
+                        birthCk = false;
+                    } else {
+                        birthCk = true;
+                    }
+                }
+
+                // 전체 날짜 유효성 확인
+                if (birthdate.length === 8 && valid) {
+                    var year = parseInt(birthdate.substring(0, 4), 10);
+                    var month = parseInt(birthdate.substring(4, 6), 10);
+                    var day = parseInt(birthdate.substring(6, 8), 10);
+                    var birthdateObject = new Date(year, month - 1, day);
+
+                    var minDate = new Date(1920, 0, 1);
+                    var maxDate = new Date();
+
+                    if (birthdateObject < minDate || birthdateObject > maxDate) {
+                        valid = false;
+                    } else {
+                        birthCk = true;
+                    }
+                }
+
+                if (!valid) {
+                    birthdateError2.text('생년월일을 확인해주세요.')
+                        .css('color', 'red')
+                        .show();
+                    birthCk = false;
+                } else {
+                    birthdateError2.hide();
+                    birthCk = true;
+                }
+            });
+
+            // 이메일 유효성 검사
+            $('#email').on('input', function () {
+                var email = $(this).val();
+                var emailError = $('#emailError');
+
+                if (email.includes('@@')) {
+                    emailError.hide();
+                    emailCk = true;
+                } else {
+                    emailError.text('이메일에는 @@가 포함되어야 합니다.')
+                              .css('color', 'red')
+                              .show();
+                    emailCk = false;
+                }
+            });
+
+            // 연락처 숫자제한
+            $('#phone').on('input', function () {
+                var phone = $(this).val();
+                var newValue = phone.replace(/[^0-9]/g, '');
+                if (phone !== newValue) {
+                    $(this).val(newValue);
+                }
+
+                if (phone.length < 6) {
+                    phoneCk = false;
+                } else {
+                    phoneCk = true;
+                }
             });
 
             $('#checkIdBtn').on('click', function () {
-                var Id = $('#Id').val();
-                checkDuplicate('Id', Id, $(this));
+                if (idCk) {
+                    var Id = $('#Id').val();
+                    checkDuplicate('Id', Id, $(this));
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Fail',
+                        text: '아이디 형식 확인 필요'
+                    });
+                }
             });
 
             $('#checkEmailBtn').on('click', function () {
-                var email = $('#email').val();
-                checkDuplicate('email', email, $(this));
+                if (emailCk) {
+                    var email = $('#email').val();
+                    checkDuplicate('email', email, $(this));
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Fail',
+                        text: '이메일 형식 확인 필요'
+                    });
+                }
             });
 
             $('#checkPhoneBtn').on('click', function () {
-                var phone = $('#phone').val();
-                checkDuplicate('phone', phone, $(this));
+                if (phoneCk) {
+                    var phone = $('#phone').val();
+                    checkDuplicate('phone', phone, $(this));
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Fail',
+                        text: '연락처 형식 확인 필요'
+                    });
+                }
             });
 
-            // 중복확인(동기화)
+            // 중복확인
             function checkDuplicate(field, value, button) {
                 $.ajax({
                     url: '/Account/DuplicateCheck',
@@ -241,6 +418,18 @@
                         button.css('background-color', 'green');
                         button.prop('disabled', true);
                         button.text('확인완료');
+                        if (field == "Id") {
+                            isIdDuplication = false;
+                            $('#idEditBtn').show();
+                        }
+                        if (field == "email"){
+                            isEmailDuplication = false;
+                            $('#emailEditBtn').show();
+                        }
+                        if (field == "phone") {
+                            isPhoneDuplication = false;
+                            $('#phoneEditBtn').show();
+                        }
                     },
                     error: function (error) {
                         Swal.fire({
@@ -252,6 +441,31 @@
                 });
             }
 
+            //수정하기
+            $('#idEditBtn').on('click', function () {
+                isIdDuplication = true;
+                $('#checkIdBtn').css('background-color', '#6C757D');
+                $('#checkIdBtn').prop('disabled', false);
+                $('#checkIdBtn').text('중복확인');
+                $('#idEditBtn').hide();
+            });
+
+            $('#emailEditBtn').on('click', function () {
+                isEmailDuplication = true;
+                $('#checkEmailBtn').css('background-color', '#6C757D');
+                $('#checkEmailBtn').prop('disabled', false);
+                $('#checkEmailBtn').text('중복확인');
+                $('#emailEditBtn').hide();
+            });
+
+            $('#phoneEditBtn').on('click', function () {
+                isPhoneDuplication = true;
+                $('#checkPhoneBtn').css('background-color', '#6C757D');
+                $('#checkPhoneBtn').prop('disabled', false);
+                $('#checkPhoneBtn').text('중복확인');
+                $('#phoneEditBtn').hide();
+            });
+
             // 회원가입 저장
             $('#registerForm').on('submit', function (e) {
                 e.preventDefault();
@@ -262,32 +476,97 @@
                     Name: $('#name').val(),
                     Birth: $('#birthdate').val(),
                     Email: $('#email').val(),
-                    Phone: $('#phone').val()
+                    Phone: $('#phone').val(),
+                    Level: 'User'
                 };
 
-                $.ajax({
-                    url: '/Account/Join',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(req),
-                    success: function (response) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: '회원가입 성공',
-                            text: req.Name + '님 환영합니다'
-                        }).then(function () {
-                            window.location.href = '/Account/Login';
-                        });
-                    },
-                    error: function (error) {
-                        console.log(error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: '회원가입 실패',
-                            text: error.responseText
-                        });
-                    }
-                });
+                if (!isIdDuplication &&
+                    !isEmailDuplication &&
+                    !isPhoneDuplication &&
+                    idCk &&
+                    pwCk &&
+                    nameCk &&
+                    birthCk &&
+                    emailCk &&
+                    phoneCk) {
+                    $.ajax({
+                        url: '/Account/Join',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(req),
+                        success: function (response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '회원가입 성공',
+                                text: req.Name + '님 환영합니다'
+                            }).then(function () {
+                                window.location.href = '/Account/Login';
+                            });
+                        },
+                        error: function (error) {
+                            console.log(error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: '회원가입 실패',
+                                text: error.responseText
+                            });
+                        }
+                    });
+                } else if (isIdDuplication) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '아이디 중복확인 필요'
+                    });
+                } else if (isEmailDuplication) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '이메일 중복확인 필요'
+                    });
+                } else if (isPhoneDuplication) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '연락처 중복확인 필요'
+                    });
+                } else if (!idCk) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '아이디 형식 확인 필요'
+                    });
+                } else if (!pwCk) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '비밀번호 형식 확인 필요'
+                    });
+                } else if (!nameCk) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '이름 형식 확인 필요'
+                    });
+                } else if (!birthCk) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '생년월일 형식 확인 필요'
+                    });
+                } else if (!emailCk) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '이메일 형식 확인 필요'
+                    });
+                } else if (!phoneCk) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '연락처 형식 확인 필요'
+                    });
+                }
             });
         });
     </script>
