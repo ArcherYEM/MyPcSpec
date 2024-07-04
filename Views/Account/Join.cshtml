@@ -128,7 +128,7 @@
                         </button>
                     </div>
                 </div>
-                <input type="tel" class="form-control" id="phone" name="phone" placeholder="사용중인 휴대번호를 입력하세요" required>
+                <input type="tel" class="form-control" id="phone" name="phone" placeholder="연락처를 하이푼(-)없이 입력하세요 (Ex. 01012341234)" required>
             </div>
 
             <div class="d-flex justify-content-center">
@@ -142,14 +142,18 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        // 중복 bool
         let isIdDuplication = true;
         let isEmailDuplication = true;
         let isPhoneDuplication = true;
 
+        // 형식 bool
         let idCk = false;
         let nameCk = false;
         let pwCk = false;
         let birthCk = false;
+        let emailCk = false;
+        let phoneCk = false;
 
         $(document).ready(function () {
             // 아이디 유효성 검사
@@ -333,22 +337,77 @@
                 }
             });
 
+            // 이메일 유효성 검사
+            $('#email').on('input', function () {
+                var email = $(this).val();
+                var emailError = $('#emailError');
+
+                if (email.includes('@@')) {
+                    emailError.hide();
+                    emailCk = true;
+                } else {
+                    emailError.text('이메일에는 @@가 포함되어야 합니다.')
+                              .css('color', 'red')
+                              .show();
+                    emailCk = false;
+                }
+            });
+
+            // 연락처 숫자제한
+            $('#phone').on('input', function () {
+                var phone = $(this).val();
+                var newValue = phone.replace(/[^0-9]/g, '');
+                if (phone !== newValue) {
+                    $(this).val(newValue);
+                }
+
+                if (phone.length < 6) {
+                    phoneCk = false;
+                } else {
+                    phoneCk = true;
+                }
+            });
+
             $('#checkIdBtn').on('click', function () {
-                var Id = $('#Id').val();
-                checkDuplicate('Id', Id, $(this));
+                if (idCk) {
+                    var Id = $('#Id').val();
+                    checkDuplicate('Id', Id, $(this));
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Fail',
+                        text: '아이디 형식 확인 필요'
+                    });
+                }
             });
 
             $('#checkEmailBtn').on('click', function () {
-                var email = $('#email').val();
-                checkDuplicate('email', email, $(this));
+                if (emailCk) {
+                    var email = $('#email').val();
+                    checkDuplicate('email', email, $(this));
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Fail',
+                        text: '이메일 형식 확인 필요'
+                    });
+                }
             });
 
             $('#checkPhoneBtn').on('click', function () {
-                var phone = $('#phone').val();
-                checkDuplicate('phone', phone, $(this));
+                if (phoneCk) {
+                    var phone = $('#phone').val();
+                    checkDuplicate('phone', phone, $(this));
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Fail',
+                        text: '연락처 형식 확인 필요'
+                    });
+                }
             });
 
-            // 중복확인(동기화)
+            // 중복확인
             function checkDuplicate(field, value, button) {
                 $.ajax({
                     url: '/Account/DuplicateCheck',
@@ -427,7 +486,9 @@
                     idCk &&
                     pwCk &&
                     nameCk &&
-                    birthCk) {
+                    birthCk &&
+                    emailCk &&
+                    phoneCk) {
                     $.ajax({
                         url: '/Account/Join',
                         type: 'POST',
@@ -469,7 +530,7 @@
                         title: 'Fail',
                         text: '연락처 중복확인 필요'
                     });
-                } else if (!idCk){
+                } else if (!idCk) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Fail',
@@ -492,6 +553,18 @@
                         icon: 'warning',
                         title: 'Fail',
                         text: '생년월일 형식 확인 필요'
+                    });
+                } else if (!emailCk) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '이메일 형식 확인 필요'
+                    });
+                } else if (!phoneCk) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fail',
+                        text: '연락처 형식 확인 필요'
                     });
                 }
             });
