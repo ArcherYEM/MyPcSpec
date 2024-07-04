@@ -12,7 +12,9 @@ builder.Services.AddDbContext<MpsContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("MPS_Database"),
     new MySqlServerVersion(new Version(8, 0, 21))));
 
+//서비스 등록
 builder.Services.AddScoped<IMemberService, MemberService>();
+builder.Services.AddScoped<ILoginHistoryService, LoginHistoryService>();
 
 var app = builder.Build();
 

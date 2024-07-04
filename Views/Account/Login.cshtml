@@ -61,12 +61,12 @@
         
             <div class="mb-3">
                 <label for="Id" class="form-label">아이디</label>
-                <input type="text" class="form-control" id="Id" name="Id" placeholder="아이디를 입력하세요" required>
+                <input type="text" class="form-control" id="id" name="Id" placeholder="아이디를 입력하세요" required>
             </div>
 
             <div class="mb-3">
                 <label for="password" class="form-label">비밀번호</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+                <input type="password" class="form-control" id="pw" name="password" placeholder="비밀번호를 입력하세요" required>
             </div>
 
             <div class="d-flex justify-content-between" style="margin-top: 35px;">
@@ -112,6 +112,31 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        $('#loginBtn').on('click', function (e) {
+            e.preventDefault();
 
+            var req = {
+                Id: $('#id').val(),
+                Pw: $('#pw').val()
+            };
+
+            $.ajax({
+                url: '/Account/Login',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(req),
+                success: function (response) {
+                    window.location.href = '/Home/Index'
+                },
+                error: function(error){
+                    console.log(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: '로그인 실패',
+                        text: error.responseText
+                    })
+                }
+            })
+        })
     </script>
 </body>

@@ -9,5 +9,6 @@ namespace MyPCSpec.Models
 
         // DbSet 정의
         public DbSet<Member> Member { get; set; }
+        public DbSet<LoginHistory> LoginHistory { get; set; }
     }
 }
