@@ -100,7 +100,7 @@
             <div class="mb-3">
                 <label for="birthdate" class="form-label">생년월일</label>
                 <input type="number" class="form-control" id="birthdate" name="birthdate" placeholder="생년월일을 입력하세요 (Ex. 19940830)" required>
-                <div class="error-message" id="birthdateError">생년월일 8자리를 입력해주세요</div>
+                <div class="error-message" id="birthdateError2" style="display:none;"></div>
             </div>
 
             <div class="mb-3">
@@ -117,6 +117,7 @@
                     </div>
                 </div>
                 <input type="email" class="form-control" id="email" name="email" placeholder="사용중인 이메일 주소를 입력하세요" required>
+                <div class="error-message" id="emailError" style="display:none;"></div>
             </div>
 
             <div class="mb-3">
@@ -137,7 +138,7 @@
 
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-dark w-25 mx-4 join-join-btn" onclick="window.location.href='/Home/Index'">취소</button>
-                <button type="submit" class="btn btn-primary w-25 mx-4 join-join-btn">저장</button>
+                <button type="submit" class="btn btn-primary w-25 mx-4 join-join-btn" id="saveBtn">저장</button>
             </div>
 
         </form>
@@ -188,6 +189,24 @@
                 }
             });
 
+            // 이메일 유효성 검사
+            $('#email').on('input', function () {
+                var email = $(this).val();
+                var emailError = $('#emailError'); // 이메일 오류 메시지를 표시할 요소
+
+                var atCount = (email.match(/&#64;/g) || []).length;
+                var dotCount = (email.match(/\./g) || []).length;
+
+                if (atCount !== 1 || dotCount !== 1) {
+                    emailError.text('이메일에는 (＠) 와 (.) 이 각각 1개씩만 포함되어야 합니다.')
+                        .css('color', 'red')
+                        .show();
+                } else {
+                    emailError.hide();
+                }
+            });
+
+            // 패스워드 유효성 검사
             $('#password').on('input', function () {
                 var hasLetter = /[a-zA-Z]/.test($(this).val());
                 var hasNumber = /\d/.test($(this).val());
@@ -238,7 +257,7 @@
                 checkPasswordMatch();
             });
 
-            // 생년월일 자리수 체크
+            // 생년월일 자리수 체크 및 유효성 검사
             $('#birthdate').on('keydown', function (e) {
                 if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                     e.preventDefault();
@@ -246,6 +265,61 @@
             }).on('input', function () {
                 if (this.value.length > 8) {
                     this.value = this.value.slice(0, 8);
+                }
+
+                var birthdate = $(this).val();
+                var birthdateError2 = $('#birthdateError2');
+                var valid = true;
+
+                // 월 입력 조건 확인
+                if (birthdate.length >= 6) {
+                    var monthDigit1 = parseInt(birthdate.charAt(4), 10);
+                    var monthDigit2 = parseInt(birthdate.charAt(5), 10);
+
+                    if (monthDigit1 === 0 && (monthDigit2 < 1 || monthDigit2 > 9)) {
+                        valid = false;
+                    } else if (monthDigit1 === 1 && (monthDigit2 < 0 || monthDigit2 > 2)) {
+                        valid = false;
+                    } else if (monthDigit1 > 1) {
+                        valid = false;
+                    }
+                }
+
+                // 일 입력 조건 확인
+                if (birthdate.length >= 8) {
+                    var dayDigit1 = parseInt(birthdate.charAt(6), 10);
+                    var dayDigit2 = parseInt(birthdate.charAt(7), 10);
+
+                    if (dayDigit1 < 0 || dayDigit1 > 3) {
+                        valid = false;
+                    } else if (dayDigit1 === 0 && dayDigit2 === 0) {
+                        valid = false;
+                    } else if (dayDigit1 === 3 && (dayDigit2 < 0 || dayDigit2 > 1)) {
+                        valid = false;
+                    }
+                }
+
+                // 전체 날짜 유효성 확인
+                if (birthdate.length === 8 && valid) {
+                    var year = parseInt(birthdate.substring(0, 4), 10);
+                    var month = parseInt(birthdate.substring(4, 6), 10);
+                    var day = parseInt(birthdate.substring(6, 8), 10);
+                    var birthdateObject = new Date(year, month - 1, day);
+
+                    var minDate = new Date(1920, 0, 1);
+                    var maxDate = new Date();
+
+                    if (birthdateObject < minDate || birthdateObject > maxDate) {
+                        valid = false;
+                    }
+                }
+
+                if (!valid) {
+                    birthdateError2.text('생년월일을 확인해주세요.')
+                        .css('color', 'red')
+                        .show();
+                } else {
+                    birthdateError2.hide();
                 }
             });
 
