@@ -65,9 +65,11 @@ namespace MyPCSpec.Controllers
                 Birth = birthDT,
                 Email = req.Email,
                 Phone = req.Phone,
+                Level = req.Level,
                 UseYn = 'Y',
                 DelYn = 'N',
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                LastLoginAt = null
             };
             try
             {

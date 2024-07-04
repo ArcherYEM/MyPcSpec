@@ -3,11 +3,6 @@
     <title>회원가입</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
-        body {
-            background-color: #2c2c2c;
-            color: #ffffff;
-        }
-
         .container {
             max-width: 600px;
             margin-top: 20px;
@@ -55,10 +50,11 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1 class="text-center join-title">회원가입</h1>
-        <form method="post" action="/Account/Register" id="registerForm">
+        <form method="post" action="/Account/Join" id="registerForm">
 
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center">
@@ -143,6 +139,7 @@
 
         </form>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -407,32 +404,41 @@
                     Name: $('#name').val(),
                     Birth: $('#birthdate').val(),
                     Email: $('#email').val(),
-                    Phone: $('#phone').val()
+                    Phone: $('#phone').val(),
+                    Level: 'User'
                 };
-                if (!isIdDuplication && !isEmailDuplication && !isPhoneDuplication)
-                $.ajax({
-                    url: '/Account/Join',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(req),
-                    success: function (response) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: '회원가입 성공',
-                            text: req.Name + '님 환영합니다'
-                        }).then(function () {
-                            window.location.href = '/Account/Login';
-                        });
-                    },
-                    error: function (error) {
-                        console.log(error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: '회원가입 실패',
-                            text: error.responseText
-                        });
-                    }
-                });
+
+                if (!isIdDuplication && !isEmailDuplication && !isPhoneDuplication) {
+                    $.ajax({
+                        url: '/Account/Join',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(req),
+                        success: function (response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '회원가입 성공',
+                                text: req.Name + '님 환영합니다'
+                            }).then(function () {
+                                window.location.href = '/Account/Login';
+                            });
+                        },
+                        error: function (error) {
+                            console.log(error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: '회원가입 실패',
+                                text: error.responseText
+                            });
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '중복 확인 필요',
+                        text: '아이디, 이메일, 연락처 중복 확인을 해주세요.'
+                    });
+                }
             });
         });
     </script>
