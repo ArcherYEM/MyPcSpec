@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MyPCSpec.styles.css" asp-append-version="true" />
     <link rel="icon" type="image/png" href="~/image/mps_logo.png" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         body {
@@ -33,7 +34,7 @@
         }
 
         .home-logo {
-            height: 60px;
+            height: 40px;
             width: auto;
             margin: 0 20px;
         }
@@ -45,7 +46,7 @@
             .navbar-custom .navbar-brand, .navbar-custom .nav-link {
                 color: #ffffff;
                 font-family: 'Arial', sans-serif;
-                font-size: 1.1rem;
+                font-size: 14px;
                 margin-right: 15px;
             }
 
@@ -54,13 +55,17 @@
                 }
 
             .navbar-custom .navbar-brand {
-                font-size: 1.3rem;
+                font-size: 20.5px;
                 font-weight: bold;
             }
 
         main {
             padding: 20px;
             flex: 1;
+        }
+
+        .cursorHover:hover {
+            cursor:pointer;
         }
     </style>
 </head>
@@ -87,14 +92,29 @@
                         </li>
                     </ul>
 
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">로그인</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Join">회원가입</a>
-                        </li>
-                    </ul>
+                    @if (Context.Session.GetString("Id") == null)
+                    {
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">로그인</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Join">회원가입</a>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <span class="nav-link cursorHover">@Context.Session.GetString("Name") (@Context.Session.GetString("Level"))</span>
+                            </li>
+                            <li class="nav-item">
+                                <span class="nav-link cursorHover" id="logOutBtn">로그아웃</span>
+                            </li>
+                        </ul>
+                    }
+
                 </div>
             </div>
         </nav>
@@ -108,6 +128,41 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        const sessionId = '@Context.Session.GetString("Id")';
+
+        $(document).ready(function () {
+            $("#logOutBtn").click(function (event) {
+                event.preventDefault();
+
+                Swal.fire({
+                    title: '로그아웃',
+                    text: "모든 세션 정보가 사라집니다",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    cancelButtonText: "로그아웃",
+                    confirmButtonText: "로그인 유지"
+                }).then((result) => {
+                    if (!result.isConfirmed) {
+                        console.log(sessionId);
+                        $.ajax({
+                            url: '/Account/Logout',
+                            type: 'GET',
+                            data: { id: sessionId },
+                            success: function () {
+                                window.location.href = '/Home/Index';
+                            },
+                            error: function () {
+                                Swal.fire('Fail', '로그아웃 중 문제가 발생했습니다.', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 
 </body>
 </html>
