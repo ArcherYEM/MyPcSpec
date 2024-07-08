@@ -112,10 +112,33 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        let sessionLoginId = '@Context.Session.GetString("Id")';
+
+        $(document).ready(function () {
+            console.log("SessionId : " + sessionLoginId);
+            if (sessionLoginId != null && sessionLoginId != "") {
+                sessionLogOut();
+            }
+        });
+
+        function sessionLogOut() {
+            $.ajax({
+                url: '/Account/Logout',
+                type: 'GET',
+                data: { id: sessionId },
+                success: function () {
+                    window.location.href = '/Account/Login';
+                },
+                error: function () {
+                    console.log('세션 초기화 실패');
+                }
+            });
+        }
+
         $('#loginBtn').on('click', function (e) {
             e.preventDefault();
 
-            var req = {
+            let req = {
                 Id: $('#id').val(),
                 Pw: $('#pw').val()
             };
@@ -126,7 +149,12 @@
                 contentType: 'application/json',
                 data: JSON.stringify(req),
                 success: function (response) {
-                    window.location.href = '/Home/Index'
+                    window.location.href = '/Home/Index';
+                    window.history.pushState(null, '', '/Home/Index');
+                    window.history.replaceState(null, '', '/Home/Index');
+                    window.onpopstate = function () {
+                        window.history.pushState(null, '', '/Home/Index');
+                    };
                 },
                 error: function(error){
                     console.log(error);

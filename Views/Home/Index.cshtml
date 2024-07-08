@@ -1,4 +1,194 @@
-﻿
-<div class="text-center">
-    index
-</div>
+﻿<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #343a40;
+            text-align: center;
+        }
+
+        .d-grid {
+            display: grid;
+        }
+
+        .gap-2 {
+            gap: 20px;
+        }
+
+        .col-6 {
+            width: 50%;
+        }
+
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .mt-3 {
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        .info-container {
+            width: 50%;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        .info-item {
+            background-color: #ffffff;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info-title {
+            font-weight: bold;
+            color: green;
+        }
+
+        .info-content {
+            text-align: right;
+            flex-grow: 1;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="d-grid gap-2 col-6 mx-auto" style="margin-top: 20px;">
+        <button class="btn btn-primary" id="pcCheck" type="button">내 PC 장비 확인하기</button>
+    </div>
+
+    <div class="info-container">
+        <div class="info-item">
+            <p class="info-title">[ CPU ]</p>
+            <span id="cpuInfo" class="info-content"></span>
+        </div>
+        <div class="info-item">
+            <p class="info-title">[ Graphics Card ]</p>
+            <span id="graphicsCardInfo" class="info-content"></span>
+        </div>
+        <div id="monitorContainer">
+            <div class="info-item">
+                <p class="info-title">[ Monitor ]</p>
+                <span id="monitorInfo" class="info-content"></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // 초기 상태로 정보 칸을 공백으로 설정
+            $('#cpuInfo').html('');
+            $('#graphicsCardInfo').html('');
+            $('#monitorInfo').html('');
+
+            $('#pcCheck').click(function (event) {
+                event.preventDefault();
+
+                $('#cpuInfo').html('확인중...');
+                $('#graphicsCardInfo').html('확인중...');
+                $('#monitorInfo').html('확인중...');
+
+                $.ajax({
+                    url: '/Spec/GetCPU',
+                    type: 'GET',
+                    success: function (data) {
+                        let cpuInfoDiv = $('#cpuInfo');
+                        cpuInfoDiv.empty();
+
+                        if (data.length > 0) {
+                            data.forEach(cpu => {
+                                cpuInfoDiv.append(`<span>${cpu}</span>`);
+                            });
+                        } else {
+                            cpuInfoDiv.html('CPU 정보 확인 불가 (관리자 문의 요망)');
+                        }
+                    },
+                    error: function () {
+                        $('#cpuInfo').html('CPU 정보를 가져오는 중 오류가 발생했습니다.');
+                    }
+                });
+
+                $.ajax({
+                    url: '/Spec/GetGraphicsCard',
+                    type: 'GET',
+                    success: function (data) {
+                        let graphicsCardDiv = $('#graphicsCardInfo');
+                        graphicsCardDiv.empty();
+
+                        if (data.length > 0) {
+                            data.forEach(graphicsCard => {
+                                graphicsCardDiv.append(`<span>${graphicsCard}</span>`);
+                            });
+                        } else {
+                            graphicsCardDiv.html('그래픽카드 정보 확인 불가 (관리자 문의 요망)');
+                        }
+                    },
+                    error: function () {
+                        $('#graphicsCardInfo').html('그래픽 카드 정보를 가져오는 중 오류가 발생했습니다.');
+                    }
+                });
+
+                $.ajax({
+                    url: '/Spec/GetMonitor',
+                    type: 'GET',
+                    success: function (data) {
+                        let monitorContainer = $('#monitorContainer');
+                        monitorContainer.empty();
+
+                        if (data.length > 0) {
+                            data.forEach((monitor, index) => {
+                                monitorContainer.append(`
+                                            <div class="info-item">
+                                                <p class="info-title">[ Monitor ${index + 1} ]</p>
+                                                <span class="info-content">${monitor}</span>
+                                            </div>
+                                        `);
+                            });
+                        } else {
+                            monitorContainer.append(`
+                                        <div class="info-item">
+                                            <p class="info-title">[ Monitor ]</p>
+                                            <span class="info-content">모니터 정보 확인 불가 (관리자 문의 요망)</span>
+                                        </div>
+                                    `);
+                        }
+                    },
+                    error: function () {
+                        $('#monitorContainer').html(`
+                                    <div class="info-item">
+                                        <p class="info-title">[ Monitor ]</p>
+                                        <span class="info-content">모니터 정보를 가져오는 중 오류가 발생했습니다.</span>
+                                    </div>
+                                `);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
