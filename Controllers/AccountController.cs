@@ -241,6 +241,22 @@ namespace MyPCSpec.Controllers
             return localIPv4;
         }
 
+        [HttpGet]
+        public IActionResult Logout(string id)
+        {
+            var sessionId = HttpContext.Session.GetString("Id");
+            if (id == sessionId)
+            {
+                HttpContext.Session.Clear();
+                
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return BadRequest("로그인정보와 일치하지 않습니다.");
+            }
+        }
+
         public IActionResult Join()
         {
             return View();
