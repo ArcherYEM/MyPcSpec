@@ -33,7 +33,7 @@
         }
 
         .home-logo {
-            height: 60px;
+            height: 40px;
             width: auto;
             margin: 0 20px;
         }
@@ -87,14 +87,29 @@
                         </li>
                     </ul>
 
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">로그인</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Join">회원가입</a>
-                        </li>
-                    </ul>
+                    @if (Context.Session.GetString("Id") == null)
+                    {
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">로그인</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Join">회원가입</a>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <span class="nav-link">@Context.Session.GetString("Name") (@Context.Session.GetString("Level"))</span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Logout">로그아웃</a>
+                            </li>
+                        </ul>
+                    }
+
                 </div>
             </div>
         </nav>

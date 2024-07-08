@@ -87,6 +87,12 @@ namespace MyPCSpec.Controllers
                                 // update 커밋
                                 await transaction.CommitAsync();
 
+                                // 세션에 정보 저장
+                                HttpContext.Session.SetString("Id", member.Id.ToString());
+                                HttpContext.Session.SetString("Name", member.Name);
+                                HttpContext.Session.SetString("LoginAt", member.LastLoginAt.ToString());
+                                HttpContext.Session.SetString("Level", member.Level);
+
                                 var vm = new MemberViewModel
                                 {
                                     Id = member.Id,
