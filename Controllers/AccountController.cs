@@ -87,6 +87,12 @@ namespace MyPCSpec.Controllers
                                 // update 커밋
                                 await transaction.CommitAsync();
 
+                                // 세션에 정보 저장
+                                HttpContext.Session.SetString("Id", member.Id.ToString());
+                                HttpContext.Session.SetString("Name", member.Name);
+                                HttpContext.Session.SetString("LoginAt", member.LastLoginAt.ToString());
+                                HttpContext.Session.SetString("Level", member.Level);
+
                                 var vm = new MemberViewModel
                                 {
                                     Id = member.Id,
@@ -233,6 +239,22 @@ namespace MyPCSpec.Controllers
             }
 
             return localIPv4;
+        }
+
+        [HttpGet]
+        public IActionResult Logout(string id)
+        {
+            var sessionId = HttpContext.Session.GetString("Id");
+            if (id == sessionId)
+            {
+                HttpContext.Session.Clear();
+                
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return BadRequest("로그인정보와 일치하지 않습니다.");
+            }
         }
 
         public IActionResult Join()
