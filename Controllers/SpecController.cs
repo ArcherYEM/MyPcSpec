@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using MyPCSpec.Helpers;
 using System.Management;
-using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
 
 namespace MyPCSpec.Controllers
 {
@@ -71,7 +70,18 @@ namespace MyPCSpec.Controllers
         {
             try
             {
-                List<string> monitors = GetMonitors();
+                var monitorNames = DisplayInfoHelper.GetMonitorNames();
+                var monitorResolutions = DisplayInfoHelper.GetMonitorResolutions();
+
+                List<string> monitors = new List<string>();
+                int count = Math.Max(monitorNames.Count, monitorResolutions.Count);
+
+                for (int i = 0; i < count; i++)
+                {
+                    string name = i < monitorNames.Count ? monitorNames[i] : "Unknown";
+                    string resolution = i < monitorResolutions.Count ? monitorResolutions[i] : "Unknown";
+                    monitors.Add($"{name} ({resolution})");
+                }
 
                 return Ok(monitors);
             }
@@ -79,42 +89,6 @@ namespace MyPCSpec.Controllers
             {
                 return StatusCode(500, "모니터 검색 중 에러 발생: " + ex.Message);
             }
-        }
-
-        private List<string> GetMonitors()
-        {
-            List<string> monitors = new List<string>();
-
-            try
-            {
-                ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity WHERE DeviceID LIKE 'DISPLAY%'");
-                foreach (ManagementObject monitor in searcher.Get())
-                {
-                    string name = monitor["Name"]?.ToString();
-                    string deviceId = monitor["DeviceID"]?.ToString();
-
-                    string screenWidth = "Unknown";
-                    string screenHeight = "Unknown";
-
-                    ManagementObjectSearcher configSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_DisplayConfiguration");
-                    foreach (ManagementObject config in configSearcher.Get())
-                    {
-                        if (config["DeviceName"] != null && config["DeviceName"].ToString().Contains(deviceId))
-                        {
-                            screenWidth = config["PelsWidth"]?.ToString();
-                            screenHeight = config["PelsHeight"]?.ToString();
-                        }
-                    }
-
-                    monitors.Add($"Monitor: {name}, Resolution: {screenWidth}x{screenHeight}");
-                }
-            }
-            catch (Exception ex)
-            {
-                monitors.Add("모니터 정보를 가져오는 중 오류가 발생했습니다: " + ex.Message);
-            }
-
-            return monitors;
         }
     }
 }
