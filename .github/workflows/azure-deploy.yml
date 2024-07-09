@@ -10,15 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # 최신 버전으로 업데이트
 
       - name: Azure Login
-        uses: azure/login@v1
+        uses: azure/login@v1.4.5  # 최신 안정 버전으로 업데이트
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3  # 최신 버전으로 업데이트
         with:
           dotnet-version: '8.0.x'  # 프로젝트의 .NET Core 버전을 지정합니다.
 
