@@ -1,26 +1,23 @@
-name: Deploy ASP.NET Core app to Azure Web App
-
-on:
-  push:
-    branches:
-      - main  # 배포를 트리거할 브랜치를 지정합니다.
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3  # 최신 버전으로 업데이트
+        uses: actions/checkout@v3
 
-      - name: Azure Login
-        uses: azure/login@v1.4.5  # 최신 안정 버전으로 업데이트
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Install Azure CLI
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+      - name: Azure CLI Login
+        run: |
+          echo "$AZURE_CREDENTIALS" > azure_credentials.json
+          az login --service-principal --username $(jq -r .clientId azure_credentials.json) --password $(jq -r .clientSecret azure_credentials.json) --tenant $(jq -r .tenantId azure_credentials.json)
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3  # 최신 버전으로 업데이트
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'  # 프로젝트의 .NET Core 버전을 지정합니다.
+          dotnet-version: '8.0.x'
 
       - name: Build project
         run: dotnet build --configuration Release
@@ -31,7 +28,7 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'mypcspec'  # Azure Web App 이름을 지정합니다.
+          app-name: 'mypcspec'
           slot-name: 'production'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ./publish
