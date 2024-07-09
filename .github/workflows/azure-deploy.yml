@@ -1,0 +1,33 @@
+name: Deploy ASP.NET Core app to Azure Web App
+
+on:
+  push:
+    branches:
+      - main  # 배포를 트리거할 브랜치를 지정합니다.
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'  # 프로젝트의 .NET Core 버전을 지정합니다.
+
+      - name: Build project
+        run: dotnet build --configuration Release
+
+      - name: Publish project
+        run: dotnet publish -c Release -o publish
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'mypcspec'  # Azure Web App 이름을 지정합니다.
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
+          package: ./publish
