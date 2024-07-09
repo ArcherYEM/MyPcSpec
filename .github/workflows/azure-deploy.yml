@@ -12,11 +12,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3  # 최신 버전으로 업데이트
 
+      - name: Install jq
+        run: sudo apt-get install jq
+
       - name: Install Azure CLI
         run: |
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
       - name: Azure CLI Login
+        env:
+          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
         run: |
           echo "$AZURE_CREDENTIALS" > azure_credentials.json
           az login --service-principal --username $(jq -r .clientId azure_credentials.json) --password $(jq -r .clientSecret azure_credentials.json) --tenant $(jq -r .tenantId azure_credentials.json)
