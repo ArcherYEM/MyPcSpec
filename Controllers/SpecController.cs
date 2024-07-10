@@ -20,6 +20,8 @@ namespace MyPCSpec.Controllers
         [HttpGet]
         public IActionResult GetCPU()
         {
+            _logger.LogInformation("GetCPU endpoint called");
+
             try
             {
                 List<string> CpuName = new List<string>();
@@ -29,10 +31,12 @@ namespace MyPCSpec.Controllers
                     CpuName.Add(obj["Name"].ToString());
                 }
 
+                _logger.LogInformation("CPU Names: {CpuName}", string.Join(", ", CpuName));
                 return Ok(CpuName);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error fetching CPU info");
                 return StatusCode(500, "CPU 검색중 에러발생 : " + ex.Message);
             }
         }
@@ -44,6 +48,8 @@ namespace MyPCSpec.Controllers
         [HttpGet]
         public IActionResult GetGraphicsCard()
         {
+            _logger.LogInformation("GetGraphicsCard endpoint called");
+
             try
             {
                 List<string> GraphicsCardNames = new List<string>();
@@ -53,10 +59,12 @@ namespace MyPCSpec.Controllers
                     GraphicsCardNames.Add(obj["Name"].ToString());
                 }
 
+                _logger.LogInformation("Graphics Card Names: {GraphicsCardNames}", string.Join(", ", GraphicsCardNames));
                 return Ok(GraphicsCardNames);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error fetching graphics card info");
                 return StatusCode(500, "그래픽 카드 검색중 에러발생 : " + ex.Message);
             }
         }
@@ -68,6 +76,8 @@ namespace MyPCSpec.Controllers
         [HttpGet]
         public IActionResult GetMonitor()
         {
+            _logger.LogInformation("GetMonitor endpoint called");
+
             try
             {
                 var monitorNames = DisplayInfoHelper.GetMonitorNames();
@@ -83,10 +93,12 @@ namespace MyPCSpec.Controllers
                     monitors.Add($"{name} ({resolution})");
                 }
 
+                _logger.LogInformation("Monitors: {Monitors}", string.Join(", ", monitors));
                 return Ok(monitors);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error fetching monitor info");
                 return StatusCode(500, "모니터 검색 중 에러 발생: " + ex.Message);
             }
         }
