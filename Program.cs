@@ -45,6 +45,8 @@ app.UseRouting();
 
 app.UseSession();
 
+app.UseStaticFiles(); // 정적 파일 제공 활성화
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
